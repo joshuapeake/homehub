@@ -1,0 +1,95 @@
+// This is your Prisma schema file. It defines models for your database.
+
+datasource db {
+  provider = "postgresql" // Use your database provider
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id          Int         @id @default(autoincrement())
+  name        String
+  email       String      @unique
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  chores      Chore[]
+}
+
+model Chore {
+  id          Int         @id @default(autoincrement())
+  title       String
+  description String?
+  assignedTo  User?       @relation(fields: [userId], references: [id])
+  userId      Int?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model PantryItem {
+  id          Int         @id @default(autoincrement())
+  name        String
+  quantity    Int
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model GroceryItem {
+  id          Int         @id @default(autoincrement())
+  name        String
+  quantity    Int
+  purchased   Boolean      @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Meal {
+  id          Int         @id @default(autoincrement())
+  title       String
+  ingredients String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model MaintenanceAsset {
+  id          Int         @id @default(autoincrement())
+  name        String
+  status      String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model MaintenanceRecord {
+  id          Int         @id @default(autoincrement())
+  assetId     Int
+  repairDate  DateTime
+  description String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model BarcodeItem {
+  id          Int         @id @default(autoincrement())
+  code        String
+  itemName    String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model CleaningRoute {
+  id          Int         @id @default(autoincrement())
+  name        String
+  tasks       HomeTask[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model HomeTask {
+  id          Int         @id @default(autoincrement())
+  cleaningRouteId Int
+  task        String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
